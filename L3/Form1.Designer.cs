@@ -52,6 +52,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -65,8 +66,8 @@
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.dataGridView1, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.tabControl1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.dataGridView1, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -82,6 +83,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(3, 367);
             this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowTemplate.Height = 28;
             this.dataGridView1.Size = new System.Drawing.Size(1281, 350);
             this.dataGridView1.TabIndex = 0;
@@ -98,6 +100,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.groupBox2);
             this.tabPage2.Controls.Add(this.groupBox3);
             this.tabPage2.Location = new System.Drawing.Point(4, 29);
             this.tabPage2.Name = "tabPage2";
@@ -120,23 +123,24 @@
             this.groupBox3.Controls.Add(this.txtNoCasa);
             this.groupBox3.Location = new System.Drawing.Point(54, 22);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(709, 259);
+            this.groupBox3.Size = new System.Drawing.Size(657, 259);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(386, 199);
+            this.button4.Location = new System.Drawing.Point(361, 199);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(167, 35);
             this.button4.TabIndex = 5;
-            this.button4.Text = "Ver Propiedades";
+            this.button4.Text = "Actualizar Lista";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(605, 158);
+            this.linkLabel1.Location = new System.Drawing.Point(575, 158);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(79, 20);
             this.linkLabel1.TabIndex = 4;
@@ -146,7 +150,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(165, 199);
+            this.button3.Location = new System.Drawing.Point(124, 199);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(139, 35);
             this.button3.TabIndex = 3;
@@ -157,7 +161,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(33, 158);
+            this.label7.Location = new System.Drawing.Point(19, 158);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(80, 20);
             this.label7.TabIndex = 2;
@@ -184,21 +188,21 @@
             // cmbxDPI
             // 
             this.cmbxDPI.FormattingEnabled = true;
-            this.cmbxDPI.Location = new System.Drawing.Point(226, 150);
+            this.cmbxDPI.Location = new System.Drawing.Point(208, 150);
             this.cmbxDPI.Name = "cmbxDPI";
             this.cmbxDPI.Size = new System.Drawing.Size(361, 28);
             this.cmbxDPI.TabIndex = 1;
             // 
             // txtCuota
             // 
-            this.txtCuota.Location = new System.Drawing.Point(226, 96);
+            this.txtCuota.Location = new System.Drawing.Point(208, 96);
             this.txtCuota.Name = "txtCuota";
             this.txtCuota.Size = new System.Drawing.Size(361, 26);
             this.txtCuota.TabIndex = 0;
             // 
             // txtNoCasa
             // 
-            this.txtNoCasa.Location = new System.Drawing.Point(226, 45);
+            this.txtNoCasa.Location = new System.Drawing.Point(208, 45);
             this.txtNoCasa.Name = "txtNoCasa";
             this.txtNoCasa.Size = new System.Drawing.Size(361, 26);
             this.txtNoCasa.TabIndex = 0;
@@ -236,7 +240,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(176, 43);
             this.button2.TabIndex = 2;
-            this.button2.Text = "Ver Propietarios";
+            this.button2.Text = "Ver/Actualizar Lista";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
@@ -298,6 +302,14 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "DPI";
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Location = new System.Drawing.Point(729, 22);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(531, 258);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -346,6 +358,7 @@
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.GroupBox groupBox2;
     }
 }
 
