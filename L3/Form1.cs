@@ -35,6 +35,7 @@ namespace L3
             propietario.Apellido = textBox3.Text;
             propietarios.Add(propietario);
             GuardarTxtPropietario();
+            MessageBox.Show("Guardado con Exito!", "Confirmacion!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             MostrarDatos("propietario");
         }
 
@@ -46,12 +47,10 @@ namespace L3
 
             if (clase=="propietario")
             {
-                LeerTxtPropietarios();
                 dataGridView1.DataSource = propietarios;
             }
             if (clase == "propiedades")
             {
-                LeerTxtPropiedad();
                 //dataGridView1.DataSource = propiedades; Con esto se lista los elementos del texto plano
                 ListadoPropietarios(); //Muestra la union de los dos archivos de texto
             }
@@ -73,7 +72,7 @@ namespace L3
                 {
                     propietarios = new List<Propietario>();
                     
-                    string[] registro = new string[3];
+                    string[] registro = new string[4];
                     string prueba = "";
                     FileStream stream = new FileStream(filename_propietario, FileMode.Open, FileAccess.Read);
                     StreamReader reader = new StreamReader(stream);
@@ -86,6 +85,7 @@ namespace L3
                         propietario.Dpi = registro[0];
                         propietario.Nombre = registro[1];
                         propietario.Apellido = registro[2];
+                        propietario.Cnt_propiedades = Convert.ToInt32(registro[3]);
                         propietarios.Add(propietario);
                     }
 
@@ -107,7 +107,7 @@ namespace L3
                 StreamWriter writer = new StreamWriter(stream);
                 foreach (var p in propietarios)
                 {
-                    writer.WriteLine(p.Dpi + ";" + p.Nombre + ";" + p.Apellido);
+                    writer.WriteLine(p.Dpi + ";" + p.Nombre + ";" + p.Apellido+";"+p.Cnt_propiedades);
                 }
                 writer.Close();
             }
@@ -117,11 +117,10 @@ namespace L3
                 StreamWriter writer = new StreamWriter(stream);
                 foreach (var p in propietarios)
                 {
-                    writer.WriteLine(p.Dpi + ";" + p.Nombre + ";" + p.Apellido);
+                    writer.WriteLine(p.Dpi + ";" + p.Nombre + ";" + p.Apellido + ";" + p.Cnt_propiedades);
                 }
                 writer.Close();
             }
-            MessageBox.Show("Guardado con Exito!", "Confirmacion!", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         #endregion
 
@@ -184,7 +183,6 @@ namespace L3
                 }
                 writer.Close();
             }
-            MessageBox.Show("Guardado con Exito!", "Confirmacion!", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         #endregion
 
@@ -196,7 +194,14 @@ namespace L3
             propiedad.Cuota_mantenimiento = Convert.ToDouble(txtCuota.Text);
             propiedad.Dpi_duenio = cmbxDPI.SelectedItem.ToString();
             propiedades.Add(propiedad);
+            Propietario temp = propietarios.Find(p=>p.Dpi==propiedad.Dpi_duenio);
+            propietario= propietarios.Find(p => p.Dpi == propiedad.Dpi_duenio);
+            propietario.Cnt_propiedades++;
+            propietarios.RemoveAll(p=>p.Dpi== propiedad.Dpi_duenio);
+            propietarios.Add(propietario);
+            GuardarTxtPropietario();
             GuardarTxtPropiedad();
+            MessageBox.Show("Guardado con Exito!", "Confirmacion!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             MostrarDatos("propiedades");
         }
         private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -223,19 +228,18 @@ namespace L3
             //MostrarDatos("propiedades");
             cargarCMBXDPI();
             LeerTxtPropietarios();
+            LeerTxtPropiedad();
             ListadoPropietarios();
         }
 
        void ListadoPropietarios()
         {
-            LeerTxtPropietarios();
-            LeerTxtPropiedad();
-            
             DataGridViewTextBoxColumn c1 = new DataGridViewTextBoxColumn();
             DataGridViewTextBoxColumn c2 = new DataGridViewTextBoxColumn();
             DataGridViewTextBoxColumn c3 = new DataGridViewTextBoxColumn();
             DataGridViewTextBoxColumn c4 = new DataGridViewTextBoxColumn();
             DataGridViewTextBoxColumn c5 = new DataGridViewTextBoxColumn();
+            DataGridViewTextBoxColumn c6 = new DataGridViewTextBoxColumn();
             c1.HeaderText = "DPI";
             dataGridView1.Columns.Add(c1);          
             c2.HeaderText = "Nombre";
@@ -246,6 +250,8 @@ namespace L3
             dataGridView1.Columns.Add(c4);
             c5.HeaderText = "Cuota Mantenimiento";
             dataGridView1.Columns.Add(c5);
+            c6.HeaderText = "Total de Casas";
+            dataGridView1.Columns.Add(c6);
             //------------------------------------------------------------------
             foreach (var item in propiedades)
             {
@@ -257,13 +263,37 @@ namespace L3
                 fila.Cells[2].Value = temp.Apellido;
                 fila.Cells[3].Value = item.No_casa;
                 fila.Cells[4].Value = item.Cuota_mantenimiento;
+                fila.Cells[5].Value = temp.Cnt_propiedades;
                 dataGridView1.Rows.Add(fila);
             }          
         }
 
         private void Button4_Click(object sender, EventArgs e)
         {
+            propiedades = propiedades.OrderByDescending(pro => pro.Cuota_mantenimiento).ToList();
             MostrarDatos("propiedades");
+        }
+
+        private void Button5_Click(object sender, EventArgs e)
+        {
+            propietario = propietarios.OrderByDescending(p=>p.Cnt_propiedades).ToList().FirstOrDefault();
+            lblMaxPersona.Text = "Propietario: " + propietario.Nombre + " " + propietario.Apellido + "\n\n\r"
+                + "Cantidad de Propiedaddes: "+propietario.Cnt_propiedades.ToString();
+            btnPago.Visible = true;
+        }
+
+        private void Button6_Click(object sender, EventArgs e)
+        {
+             propietario = propietarios.OrderByDescending(p => p.Cnt_propiedades).ToList().FirstOrDefault();
+            double suma=0;
+            foreach (var p in propiedades)
+            {
+                if (p.Dpi_duenio==propietario.Dpi)
+                {
+                    suma += p.Cuota_mantenimiento;
+                }
+            }
+            lblPago.Text = "Total a Pagar: " + suma.ToString();
         }
     }
 }
