@@ -49,7 +49,7 @@ namespace L3
             if (clase == "propiedades")
             {
                 LeerTxtPropiedad();
-                dataGridView1.DataSource = propietarios;
+                dataGridView1.DataSource = propiedades;
             }
             dataGridView1.Refresh();
         }
@@ -138,7 +138,6 @@ namespace L3
                     FileStream stream = new FileStream(filename_propiedades, FileMode.Open, FileAccess.Read);
                     StreamReader reader = new StreamReader(stream);
                     datos = reader.ReadLine();
-
                     while (datos != null)
                     {
                         registro = datos.Split(';');
@@ -191,23 +190,26 @@ namespace L3
             propiedad = new Propiedad();
             propiedad.No_casa = Convert.ToInt32(txtNoCasa.Text);
             propiedad.Cuota_mantenimiento = Convert.ToDouble(txtCuota.Text);
-            propiedad.Dpi_duenio = cmbxDPI.SelectedValue.ToString();
-            MessageBox.Show(propiedad.Dpi_duenio);
-            /*propiedades.Add(propiedad);
+            propiedad.Dpi_duenio = cmbxDPI.SelectedItem.ToString();
+            propiedades.Add(propiedad);
             GuardarTxtPropiedad();
-            MostrarDatos("propiedad");*/
+            MostrarDatos("propiedades");
         }
 
 
 
         private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            cargarCMBXDPI();
+        }
+        void cargarCMBXDPI()
+        {
+            LeerTxtPropietarios();
             foreach (var item in propietarios)
             {
                 cmbxDPI.Items.Add(item.Dpi);
             }
         }
-
         private void Button2_Click(object sender, EventArgs e)
         {
             MostrarDatos("propietario");
@@ -215,7 +217,8 @@ namespace L3
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            MostrarDatos("propiedad");
+            MostrarDatos("propiedades");
+            cargarCMBXDPI();
             LeerTxtPropietarios();
         }
 
